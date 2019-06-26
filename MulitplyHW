@@ -1,0 +1,56 @@
+# Sergio Gonzalez
+#CSC 230 10578
+#3/25/2016
+#This program will take the following C code
+#fragment and translate it into assembly 
+#
+#
+#int main()
+#{   int K,Y
+#    int Z[50]
+#    Y = 56
+#    K = 20
+#    Z[K] = Y - 16 * (K/4 + 210);
+#}
+
+
+.data
+   Y: .word 56
+   K: .word 20
+   array: .word 0:50
+   sum: .word 0
+   
+.text
+main:
+   lw $t0, Y
+   lw $t1, K
+   lw $t2, sum
+   
+   la $t3, array #base address of array is $t3
+   mul $t4, $t1, 4 #mult K by four to get offest of array for Z[K]
+   
+   divu $t2, $t1, 4 #sum = K/4
+   addi $t2, $t2, 210 #sum += 210
+   multu $t2, $t2, 16 #sum *= 16
+   subu $t2, $t0, $t2 #sum = y - sum
+   
+   sw $t2, sum
+   
+   li $v0, 1
+   lw $a0, sum
+   syscall
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   

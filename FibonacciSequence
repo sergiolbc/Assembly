@@ -1,0 +1,47 @@
+#Sergio Gonzalez
+#CSC 230 10578
+#03/21/16
+#This program will compute the first twelve fibonacci 
+#numbers and put in array, then print
+
+.data
+	.data #declarations and stuff
+	size: .word 12
+	sum: .word 1
+	array: 1
+	
+	strSpace: .asciiz " "
+
+
+.text 
+	lw $t0, sum #start off with one
+	la $t3, array #base address of array is $t3
+
+for:
+	lw $t2, size #store length in $t2
+	addi $t2, $t2, -1 #$t2 - 1 for the length - 1
+	li $t1, 0 #intialize i to 0
+	
+for_fibonacci:
+	bgt $t1, $t2, next #loop as long i < array length
+	mul $t4, $t1, 4 #mult i by four to get offest of array
+	add $t4, $t3, $t4 #add base add of array to $12 to get add array[i]
+	lw $t0, 0($t4)#load value of array[i] from memory into $12
+	add $t0, $t0, $t4 #update sum
+	addi $t1, $t1, 1 #increment i++
+	
+	sw $t0, sum
+	
+	li $v0, 1 #to print int	
+	lw $a0, sum
+	syscall
+	
+	li $v0, 4 #to print space
+	la $a0, strSpace
+	syscall
+	
+	b for_fibonacci
+	
+next:
+	li $v0, 10
+	syscall

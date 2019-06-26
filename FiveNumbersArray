@@ -1,0 +1,74 @@
+#Sergio Gonzalez
+#CSC 230 10578
+#3/09/2016
+#This program will take five integers
+#and store them in an array then add them in first slot
+#and afterwards double the value in each next element till filled
+
+# reference website
+# http://www.ecs.umass.edu/ece232/resource/MIPS_guide.pdf
+
+#sum = 0; 				($t0 for sum, $8)
+#for (i = 0; i < array length; i++)	($t1 for i, $9)
+#	sum += array[i]			($t2 for length - 1, $10)
+#					($t3 for bse address of array, $11)
+#
+
+
+
+.data #declarations and stuff
+	array: .word 1, 2, 1, 3, 2
+	size: .word 5
+	sum: .word 0
+	
+	strArray: .asciiz "Numbers into array: 1, 2, 1, 3, 2 \nValues after manipulation: "
+	strSpace: .asciiz " "
+
+.text #does the logic of the program
+main:
+	lw $t0, sum #store sum in $t0
+	la $t3, array #base address of array is $t3
+	
+for:
+	lw $t2, size #store length in $t2
+	addi $t2, $t2, -1 #$t2 - 1 for the length - 1
+	li $t1, 0 #intialize i to 0
+	
+sum_loop:
+	bgt $t1, $t2, next #loop as long i < array length
+	mul $t4, $t1, 4 #mult i by four to get offest of array
+	add $t4, $t3, $t4 #add base add of array to $12 to get add array[i]
+	lw $t4, 0($t4)#load value of array[i] from memory into $12
+	add $t0, $t0, $t4 #update sum
+	addi $t1, $t1, 1 #increment i++
+	b sum_loop
+	
+reset_for:
+	lw $t2, size #store length in $t2
+	addi $t2, $t2, -1 #$t2 - 1 for the length - 1
+	li $t1, 0 #intialize i to 0
+	
+	li $v0, 4 #to print string 
+	la $a0, strArray
+	syscall
+	
+double_loop:
+	bgt $t1, $t2, next #loop as long i < array length
+	mul $t4, $t1, 4 #mult i by four to get offest of array
+	add $t4, $t3, $t4 #add base add of array to $12 to get add array[i]
+	lw $t4, 0($t4)#load value of array[i] from memory into $12
+	mul $t0, $t4, 2 #multiply the sum by 2
+	
+	li $v0, 1 #to print int	
+	la $a0, ($t0)
+	syscall
+	
+	li $v0, 4 #to print space
+	la $a0, strSpace
+	syscall
+	
+	addi $t1, $t1, 1 #increment i++
+	b double_loop
+	
+	li $v0, 10 #closes program
+	syscall

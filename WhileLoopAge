@@ -1,0 +1,56 @@
+# Sergio Gonzalez
+#CSC 230 10578
+#While Loop
+
+.data
+	age: .word 0
+	minAge: .word 18
+	maxAge: .word 100
+	
+	askAge: .asciiz "What is your age? "
+	cantVote: .asciiz "You can't vote!"
+	canVote: .asciiz "Ayy, you can vote!"
+
+
+.text
+main:
+	li $v0, 4 #system call to print string
+	la $a0, askAge #print askAge string
+	syscall
+	
+	li $v0, 5 #system call for gathering int
+	syscall
+	
+	sw $v0, age #stored user input into age variable
+	
+	sw $t0, minAge
+	sw $t1, maxAge
+	sw $t2, age
+	
+	bge $t2, $t0, checkMax #checks if age is greater than minAge
+	b notAble
+	
+checkMax:
+	ble $t1, $t2, Able #checks if maxAge is greater
+	b notAble
+
+Able:	
+	li $v0, 4
+	la $a0, canVote
+	syscall
+	b exit
+
+notAble:
+	li $v0, 4
+	la $a0, cantVote
+	syscall
+	
+exit:
+	
+	
+	
+	
+	
+	
+
+	

@@ -1,0 +1,50 @@
+# Sergio Gonzalez
+#CSC 230 10578
+#2/26/2016
+#This program will take three integers 
+#find the smallest one and print out the smallest
+
+.data #declare variables and fun stuff
+	numX: .word 2
+	numY: .word 4
+	numZ: .word 3
+	
+	strSmallest: .asciiz "The smallest integer between 4, 2, and 3 is: "
+
+
+.text #does the logic of the program
+main: #label
+
+	lw $t0, numX #populate the temporary registers with declared variables
+	lw $t1, numY
+	lw $t2, numZ
+	
+	blt $t0, $t1, xComz #if x < y, branch to compare if x < z
+	blt $t1, $t2, ySmallest # if y < z, branch to ySmallest
+	b zSmallest
+	
+xComz:
+	blt $t0, $t2, next #if x < z, branch to next
+	b zSmallest #else z is smallest
+
+ySmallest:
+	lw $t0, ($t1)
+	b next
+
+zSmallest:
+	sw $t0, ($t2)
+	
+next:
+	li $v0, 4
+	la $a0, strSmallest
+	syscall
+	
+	li $v0, 1
+	la $a0, ($t0)
+	syscall
+	
+	li $v0, 10
+	syscall
+
+	
+	
